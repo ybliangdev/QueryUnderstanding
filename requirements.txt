@@ -1,0 +1,7 @@
+fastapi~=0.115
+uvicorn[standard]~=0.30
+pydantic~=2.7
+spacy~=3.7
+numpy~=1.26
+pytest~=7.4
+
