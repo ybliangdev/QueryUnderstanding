@@ -55,3 +55,12 @@ All tasks completed:
 Created venv
 Installed deps
 Started Uvicorn dev server
+
+Test the v1/Parse endpoint:
+
+```
+powershell -NoProfile -Command "(Invoke-WebRequest -UseBasicParsing -Method POST -Uri http://localhost:8000/v1/parse -ContentType 'application/json' -Body (@{ text = 'Can you find me a good pizza place in NYC?' } | ConvertTo-Json)).Content"
+
+outputs:
+{"raw_query":"Can you find me a good pizza place in NYC?","normalized_query":"can you find I a good pizza place in nyc","intent":{"name":"find_restaurant","confidence":0.95},"entities":[{"text":"pizza place","value":"pizza","type":"food_type","start_char":23,"end_char":34},{"text":"good","value":"good","type":"sort_by","start_char":18,"end_char":22},{"text":"NYC","value":"New York City","type":"location","start_char":38,"end_char":41},{"text":"NYC","value":"New York City","type":"location","start_char":38,"end_char":41}],"pipeline_latency_ms":9}
+```
