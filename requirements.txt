@@ -4,4 +4,6 @@ pydantic~=2.7
 spacy~=3.7
 numpy~=1.26
 pytest~=7.4
+transformers~=4.44
+torch>=2.2,<3
 

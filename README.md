@@ -36,6 +36,15 @@ docker run -p 8000:8000 --rm qu:local
 - Phase 2: Zero-shot + spaCy NER
 - Phase 3: Fine-tuned PyTorch multitask
 
+### Switch to zero-shot backend (Phase 2)
+
+```powershell
+$env:QU_MODEL_BACKEND = "zeroshot"
+# Optionally customize intents
+$env:QU_INTENTS = "find_restaurant,get_weather,schedule_reminder"
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
 
 ---
 
@@ -64,3 +73,33 @@ powershell -NoProfile -Command "(Invoke-WebRequest -UseBasicParsing -Method POST
 outputs:
 {"raw_query":"Can you find me a good pizza place in NYC?","normalized_query":"can you find I a good pizza place in nyc","intent":{"name":"find_restaurant","confidence":0.95},"entities":[{"text":"pizza place","value":"pizza","type":"food_type","start_char":23,"end_char":34},{"text":"good","value":"good","type":"sort_by","start_char":18,"end_char":22},{"text":"NYC","value":"New York City","type":"location","start_char":38,"end_char":41},{"text":"NYC","value":"New York City","type":"location","start_char":38,"end_char":41}],"pipeline_latency_ms":9}
 ```
+
+## Tests
+
+Run the test suite from the project root.
+
+Setup (once):
+
+```bash
+# create/activate venv (see Run locally above), then:
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+```
+
+Set PYTHONPATH to the project root (needed so `import app` works in tests), then run pytest:
+
+```bash
+# Bash/zsh
+export PYTHONPATH=$(pwd)
+pytest -q
+```
+
+```powershell
+# PowerShell
+$env:PYTHONPATH = (Get-Location).Path
+pytest -q
+```
+
+Tips:
+- To run a single test: `pytest -q tests/test_api_parse.py::test_parse_contract_and_stub_logic`
+- If you see `ModuleNotFoundError: No module named 'app'`, ensure PYTHONPATH is set to the repo root.

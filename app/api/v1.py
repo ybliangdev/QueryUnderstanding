@@ -6,7 +6,7 @@ from app.schemas.request import ParseRequest
 from app.schemas.response import ParseResponse, Intent, Entity
 from app.timing import now_ms, elapsed_ms
 from app.nlp.preprocessor import QueryPreprocessor
-from app.models.stub import StubModel
+from app.models.factory import create_model
 
 
 router = APIRouter()
@@ -14,7 +14,7 @@ router = APIRouter()
 
 _settings = get_settings()
 _preprocessor = QueryPreprocessor(keep_stopwords=True, remove_punct=True)
-_model = StubModel()
+_model = create_model(_preprocessor)
 
 
 @router.post("/parse", response_model=ParseResponse)
